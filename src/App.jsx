@@ -1,27 +1,34 @@
 import { useState } from "react";
 import Header from "./components/Header";
-import Input from "./components/Input";
-import Table from "./components/Table";
+import UserInput from "./components/UserInput";
+import Results from "./components/Results";
+// import Table from "./components/Table";
 
 function App() {
-  const investments = {
+  const [userInput, setUserInput] = useState({
     initialInvestment: 1000,
     annualInvestment: 1200,
-    expectedReturn: 6,
+    expectedReturn: 5,
     duration: 10,
-  };
-
-  const [investment, setInvestment] = useState(investments);
-  console.log(investment);
+  });
+  const validData = userInput.duration >= 1;
+  function handleChange(name, value) {
+    setUserInput((prevValues) => ({
+      ...prevValues,
+      [name]: +value,
+    }));
+  }
   return (
     <>
       <Header />
-      <div id="user-input">
-        <Input setInvestment={setInvestment} />
-      </div>
-      <div>
-        <Table investment={investment} />
-      </div>
+      <UserInput userInput={userInput} onChange={handleChange} />
+      {/* {userInput.duration < 1 ? (
+        <p className="center">Please enter valid data </p>
+      ) : (
+        <Results input={userInput} />
+      )} */}
+      {!validData && <p className="center">Please enter valid data </p>}
+      {validData && <Results input={userInput} />}
     </>
   );
 }
